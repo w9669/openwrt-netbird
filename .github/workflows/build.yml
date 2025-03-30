@@ -48,34 +48,10 @@ jobs:
           fi
   
   build:
-    name: Build - ${{ matrix.target.arch }}
+    name: Build - arm_cortex-a5_neon-vfpv4
     needs: check
     if: needs.check.outputs.update == 'true' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        target:
-          - arch: "aarch64_generic"
-            sdk: "https://downloads.openwrt.org/releases/23.05.4/targets/rockchip/armv8/openwrt-sdk-23.05.4-rockchip-armv8_gcc-12.3.0_musl.Linux-x86_64.tar.xz"
-          - arch: "arm_cortex-a9"
-            sdk: "https://downloads.openwrt.org/releases/23.05.4/targets/bcm53xx/generic/openwrt-sdk-23.05.4-bcm53xx-generic_gcc-12.3.0_musl_eabi.Linux-x86_64.tar.xz"
-          - arch: "arm_cortex-a15"
-            sdk: "https://downloads.openwrt.org/releases/23.05.4/targets/ipq806x/generic/openwrt-sdk-23.05.4-ipq806x-generic_gcc-12.3.0_musl_eabi.Linux-x86_64.tar.xz"
-          - arch: "aarch64_cortex-a53"
-            sdk: "https://downloads.openwrt.org/releases/23.05.4/targets/bcm27xx/bcm2710/openwrt-sdk-23.05.4-bcm27xx-bcm2710_gcc-12.3.0_musl.Linux-x86_64.tar.xz"
-          - arch: "aarch64_cortex-a72"
-            sdk: "https://downloads.openwrt.org/releases/23.05.4/targets/bcm27xx/bcm2711/openwrt-sdk-23.05.4-bcm27xx-bcm2711_gcc-12.3.0_musl.Linux-x86_64.tar.xz"
-          - arch: "arm_cortex-a7_neon-vfpv4"
-            sdk: "https://downloads.openwrt.org/releases/23.05.4/targets/ipq40xx/generic/openwrt-sdk-23.05.4-ipq40xx-generic_gcc-12.3.0_musl_eabi.Linux-x86_64.tar.xz"
-          - arch: "x86_64"
-            sdk: "https://downloads.openwrt.org/releases/23.05.4/targets/x86/64/openwrt-sdk-23.05.4-x86-64_gcc-12.3.0_musl.Linux-x86_64.tar.xz"
-          - arch: "i386_pentium4"
-            sdk: "https://downloads.openwrt.org/releases/23.05.4/targets/x86/generic/openwrt-sdk-23.05.4-x86-generic_gcc-12.3.0_musl.Linux-x86_64.tar.xz"
-          - arch: "mips_74kc"
-            sdk: "https://downloads.openwrt.org/releases/23.05.4/targets/ath79/generic/openwrt-sdk-23.05.4-ath79-generic_gcc-12.3.0_musl.Linux-x86_64.tar.xz"
-          - arch: "mipsel_24kc"
-            sdk: "https://downloads.openwrt.org/releases/23.05.4/targets/ramips/mt7621/openwrt-sdk-23.05.4-ramips-mt7621_gcc-12.3.0_musl.Linux-x86_64.tar.xz"
     steps:
       - name: Checkout
         uses: actions/checkout@main
@@ -97,7 +73,7 @@ jobs:
 
       - name: Install OpenWrt SDK
         run: |
-          wget ${{ matrix.target.sdk }} -O openwrt-sdk.tar.xz
+          wget https://downloads.openwrt.org/releases/23.05.4/targets/at91/sama5/openwrt-sdk-23.05.4-at91-sama5_gcc-12.3.0_musl_eabi.Linux-x86_64.tar.xz -O openwrt-sdk.tar.xz
           tar -xf openwrt-sdk.tar.xz
           mv -f openwrt-sdk-* openwrt-sdk
 
@@ -123,7 +99,7 @@ jobs:
       - name: Upload to Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: netbird-${{ matrix.target.arch }}
+          name: netbird-arm_cortex-a5_neon-vfpv4
           path: openwrt-sdk/packed/*.ipk
           if-no-files-found: error
 
